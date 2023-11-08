@@ -6,6 +6,18 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <!-- Strings for shop selection -->
+    <string name="shopSelection1">Food items</string>
+    <string name="shopSelection2">Pet toys</string>
+    <!-- Strings for shop prices -->
+    <string name="priceItem1">0</string>
+    <string name="priceItem2">0</string>
+    <string name="priceItem3">0</string>
+    <string name="priceItem4">0</string>
+    <string name="priceItem5">0</string>
+    <string name="priceItem6">0</string>
+    <string name="priceItem7">0</string>
+    <string name="priceItem8">0</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris

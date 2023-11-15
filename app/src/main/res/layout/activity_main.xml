@@ -28,6 +28,7 @@
         app:srcCompat="@drawable/lechita0029" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="405dp"
         android:layout_height="100dp"
         android:orientation="horizontal"
@@ -56,5 +57,25 @@
             android:layout_weight="1"
             android:text="Shop" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/food_b"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Food"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/food_mainact_slider"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="187dp"
+        android:layout_height="28dp"
+        android:max="100"
+        android:progress="10"
+        android:progressTint="#00FF41"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

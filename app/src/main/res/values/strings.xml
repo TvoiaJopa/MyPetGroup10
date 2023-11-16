@@ -18,7 +18,7 @@
     <string name="priceItem6">0</string>
     <string name="priceItem7">0</string>
     <string name="priceItem8">0</string>
-
+    <string name="google_map_api_key"></string>
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus

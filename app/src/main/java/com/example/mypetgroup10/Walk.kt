@@ -27,7 +27,7 @@ class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_walk_screen)
-        val navigateToPlayRoomButton: Button = findViewById(R.id.mapFragment)
+        val navigateToPlayRoomButton: Button = findViewById(R.id.back_b_walk)
         navigateToPlayRoomButton.setOnClickListener {
             SetNewScreen(Screens.Home)
 

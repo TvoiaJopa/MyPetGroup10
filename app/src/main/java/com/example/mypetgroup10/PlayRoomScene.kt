@@ -53,11 +53,6 @@ class PlayRoom : AppCompatActivity() {
             }
             healthBar.progress = currentHealth
         }
-        val resetHealthButton: Button = findViewById(R.id.resetHealthButton)
-        resetHealthButton.setOnClickListener {
-            currentHealth = 1
-            healthBar.progress = currentHealth
-        }
 
 
         val homeButton: FloatingActionButton = findViewById(R.id.gohome_b)

@@ -1,11 +1,15 @@
 package com.example.mypetgroup10
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
+import android.os.Handler
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.ProgressBar
 
 
@@ -49,9 +53,114 @@ import android.widget.ProgressBar
             giveFood()
         }
 
-    }
 
-    private fun getData() {
+    }
+     override fun onResume() {
+         super.onResume()
+
+         // Start the hunger timer when the activity resumes
+         hungerTimer.start()
+         animationTimer.start()
+
+     }
+     val hungerTimer = object : CountDownTimer(60000, 1000) { // 60 seconds countdown, updates every 1 second
+         override fun onTick(millisUntilFinished: Long) {
+             // Update hunger level here
+             decreaseHunger()
+         }
+
+         override fun onFinish() {
+             // Handle when the timer finishes (optional)
+         }
+     }
+
+     val animationTimer = object : CountDownTimer(10000, 2000) { // 10 seconds countdown, updates every 2 seconds
+         override fun onTick(millisUntilFinished: Long) {
+             // Trigger the animation here
+             startPetAnimation()
+         }
+
+         override fun onFinish() {
+             // Handle when the animation timer finishes (optional)
+         }
+     }
+
+     private fun decreaseHunger() {
+         val sharedPreferences = getSharedPreferences("your_game_prefs", Context.MODE_PRIVATE)
+         var hunger = sharedPreferences.getInt("hunger", -1)
+
+         if (hunger > 0) {
+             hunger -= 1
+             // Save the updated hunger level
+             val editor = sharedPreferences.edit()
+             editor.putInt("hunger", hunger)
+             editor.apply()
+
+             // Update the UI
+             val foodSlider: ProgressBar = findViewById(R.id.food_mainact_slider)
+             foodSlider.progress = hunger
+         } else {
+             // Handle when the pet is starving (optional)
+         }
+     }
+     override fun onPause() {
+         super.onPause()
+         hungerTimer.cancel()
+         animationTimer.cancel()
+
+     }
+     private var currentDrawableId = 1
+
+     private fun startPetAnimation() {
+         val petImageView: ImageView = findViewById(R.id.imageView)
+
+         // Create a handler to change drawables rapidly
+         val handler = Handler()
+
+         val delayMillis = 1000 // Adjust the delay as needed
+
+         // Runnable to change drawables
+         val runnable = object : Runnable {
+             override fun run() {
+                 // Change the drawable
+                 val drawableId = getDrawableId()
+                 petImageView.setImageResource(drawableId)
+
+                 // Schedule the next drawable change
+                 handler.postDelayed(this, delayMillis.toLong())
+             }
+         }
+
+         // Start the initial drawable change
+         handler.post(runnable)
+     }
+
+     private fun getDrawableId(): Int {
+         // Get the resource ID based on the current drawable ID
+         val formattedDrawableName = "lechita" + String.format("%04d", currentDrawableId)
+         val drawableId = resources.getIdentifier(formattedDrawableName, "drawable", packageName)
+
+         // Increment the drawable ID for the next iteration
+         currentDrawableId++
+         if (currentDrawableId > 30) {
+             // Restart from the beginning when reaching the end
+             currentDrawableId = 1
+         }
+
+         return drawableId
+     }
+
+
+
+     private fun updatePetImage(hunger: Int) {
+         val petImageView: ImageView = findViewById(R.id.imageView)
+
+         petImageView.setImageResource(R.drawable.lechita0001)
+
+     }
+
+
+     private fun getData() {
         val sharedPreferences = getSharedPreferences("your_game_prefs", Context.MODE_PRIVATE)
 
         // Retrieve data with default values

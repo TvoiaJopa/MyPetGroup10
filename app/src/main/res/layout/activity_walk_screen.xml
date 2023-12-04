@@ -24,4 +24,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <ProgressBar
+        android:id="@+id/energy_mainact_slider"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="187dp"
+        android:layout_height="64dp"
+        android:max="100"
+        android:progressTint="#00FF41"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

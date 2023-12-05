@@ -177,6 +177,19 @@ import android.widget.ProgressBar
             editor.putInt("hungerMax", 100)
             hungerMax = 100
             editor.putString("player_name", "John Doe")
+
+            //adds shop items here too :)
+            editor.putInt("money", 0)
+            editor.putInt("toy1", 0)
+            editor.putInt("toy1", 0)
+            editor.putInt("toy2", 0)
+            editor.putInt("toy3", 0)
+            editor.putInt("toy4", 0)
+            editor.putInt("food1", 0)
+            editor.putInt("food2", 0)
+            editor.putInt("food3", 0)
+            editor.putInt("food4", 0)
+
             editor.apply()
         }
 

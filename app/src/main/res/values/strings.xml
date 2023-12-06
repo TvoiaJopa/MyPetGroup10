@@ -9,7 +9,7 @@
     <!-- Strings for shop selection -->
     <string name="shopSelection1">Food items</string>
     <string name="shopSelection2">Pet toys</string>
-    <!-- Strings for shop prices -->
+    <!-- Default strings for shop prices -->
     <string name="priceItem1">0</string>
     <string name="priceItem2">0</string>
     <string name="priceItem3">0</string>

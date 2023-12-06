@@ -22,28 +22,26 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.Priority
 import com.google.android.gms.location.LocationRequest
-
-
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.tasks.CancellationToken
+import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.android.gms.tasks.OnTokenCanceledListener
 
 class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var currentLocation: Location
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val permissionCode = 101
+    private var locationRequest = createLocationRequest()
     val mainHandler = Handler(Looper.getMainLooper())
     private lateinit var locationCallback: LocationCallback
-    val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 3000)
-        .apply {
-            setWaitForAccurateLocation(false)
-            setMaxUpdateDelayMillis(10000)
-        }.build()
+    var requestingLocationUpdates = true
 
 
     private var mGoogleMap: GoogleMap? = null
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_walk_screen)
         val navigateToPlayRoomButton: Button = findViewById(R.id.back_b_walk)
@@ -56,16 +54,18 @@ class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         locationCallback = object : LocationCallback() {
 
+
+
         }
 
-        //createLocationRequest()
-        getCurrentLocationUser()
+        createLocationRequest()
         startLocationUpdates()
+
         mainHandler.post(object : Runnable {
             override fun run() {
                 startLocationUpdates()
-                getCurrentLocationUser()
-                mainHandler.postDelayed(this, 3000)
+                //createLocationRequest()
+                mainHandler.postDelayed(this, 2000)
             }
         })
     }
@@ -95,15 +95,14 @@ class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
-
-    private fun getCurrentLocationUser() {
-        //Check if permission for location is granted, request permission if it is not
+    private fun startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(
-                this, android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) !=
-            PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
-                (this, android.Manifest.permission.ACCESS_COARSE_LOCATION) !=
-            PackageManager.PERMISSION_GRANTED
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
                 this,
@@ -111,19 +110,32 @@ class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
                 permissionCode
             )
             return
-        }
-        val getLocation =
-            fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-                if (location != null) {
-                    currentLocation = location
 
-                    val mapFragment =
-                        supportFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
-                    mapFragment.getMapAsync(this)
+        }
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+        val getLocation =
+            fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, object : CancellationToken() {
+                override fun onCanceledRequested(p0: OnTokenCanceledListener) = CancellationTokenSource().token
+
+                override fun isCancellationRequested() = false
+
+                })
+                .addOnSuccessListener { location: Location? ->
+                    if (location != null) {
+                        currentLocation = location
+                        val mapFragment =
+                            supportFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
+                        mapFragment.getMapAsync(this)
+                        /*val toast = Toast.makeText(this, "test", Toast.LENGTH_SHORT)
+                        toast.show()*/
+
                 }
             }
 
+
+
     }
+
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -135,17 +147,19 @@ class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
             permissionCode -> if (grantResults.isNotEmpty() && grantResults[0] ==
                 PackageManager.PERMISSION_GRANTED
             ) {
-                getCurrentLocationUser()
+                startLocationUpdates()
             }
         }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+        googleMap.clear()
         val latLng = LatLng(currentLocation.latitude, currentLocation.longitude)
-        val markerOptions = MarkerOptions().position(latLng).title("Sijainti")
+        val markerOptions = MarkerOptions().position(latLng).title("Sijainti").icon(
+            BitmapDescriptorFactory.fromResource(R.drawable.lechita0030))
 
-        val toast = Toast.makeText(this, latLng.toString(), Toast.LENGTH_SHORT)
-        toast.show()
+
+
 
         googleMap?.animateCamera(CameraUpdateFactory.newLatLng(latLng))
         googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
@@ -160,46 +174,35 @@ class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
         energyBar.progress = energyAmount
     }
 
-    private fun startLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return
-
-        }
-        val toast = Toast.makeText(this, "testi", Toast.LENGTH_SHORT)
-        toast.show()
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest,
-            locationCallback,
-            Looper.getMainLooper())
-    }
 
 
-    private fun stopLocationUpdates() {
-        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
-    }
 
+    fun createLocationRequest(): LocationRequest =
 
-    fun createLocationRequest() {
-        val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 3000)
+        LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
             .apply {
                 setWaitForAccurateLocation(false)
-                setMaxUpdateDelayMillis(10000)
+                setMaxUpdateDelayMillis(2000)
             }.build()
+
+
+
+
+    override fun onPause() {
+        super.onPause()
+        stopLocationUpdates()
+    }
+    override fun onResume() {
+        super.onResume()
+        if (requestingLocationUpdates) startLocationUpdates()
+    }
+    private fun stopLocationUpdates() {
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+        requestingLocationUpdates = false;
     }
 
 
 
 }
+
+

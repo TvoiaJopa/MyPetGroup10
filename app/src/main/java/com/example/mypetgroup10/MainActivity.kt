@@ -11,9 +11,12 @@ import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.TextView
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
- class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +56,7 @@ import android.widget.ProgressBar
             giveFood()
         }
 
+        checkAndGiveMoney();
 
     }
      override fun onResume() {
@@ -74,7 +78,7 @@ import android.widget.ProgressBar
          }
      }
 
-     val animationTimer = object : CountDownTimer(10000, 2000) { // 10 seconds countdown, updates every 2 seconds
+     val animationTimer = object : CountDownTimer(15000, 3000) { // 10 seconds countdown, updates every 2 seconds
          override fun onTick(millisUntilFinished: Long) {
              // Trigger the animation here
              startPetAnimation()
@@ -117,7 +121,7 @@ import android.widget.ProgressBar
          // Create a handler to change drawables rapidly
          val handler = Handler()
 
-         val delayMillis = 1000 // Adjust the delay as needed
+         val delayMillis = (1000/2) // Adjust the delay as needed
 
          // Runnable to change drawables
          val runnable = object : Runnable {
@@ -142,7 +146,7 @@ import android.widget.ProgressBar
 
          // Increment the drawable ID for the next iteration
          currentDrawableId++
-         if (currentDrawableId > 30) {
+         if (currentDrawableId > 15) {
              // Restart from the beginning when reaching the end
              currentDrawableId = 1
          }
@@ -179,7 +183,7 @@ import android.widget.ProgressBar
             editor.putString("player_name", "John Doe")
 
             //adds shop items here too :)
-            editor.putInt("money", 0)
+            editor.putInt("money", 100)
             editor.putInt("toy1", 0)
             editor.putInt("toy1", 0)
             editor.putInt("toy2", 0)
@@ -221,7 +225,34 @@ import android.widget.ProgressBar
         foodSlider.max = hungerMax
         foodSlider.progress = hunger
     }
-    private fun SetNewScreen(screen: Screens) {
+
+     private fun checkAndGiveMoney() {
+         val sharedPreferences = getSharedPreferences("your_game_prefs", Context.MODE_PRIVATE)
+         val lastMoneyTime = sharedPreferences.getLong("lastMoneyTime", -1)
+         val currentDate = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(System.currentTimeMillis())
+         val lastMoneyDate = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(lastMoneyTime)
+         var money = sharedPreferences.getInt("money", 100)
+
+         if (lastMoneyDate != currentDate) {
+             // Player hasn't received money today
+             // Implement your logic to give money here
+
+             // Update the last money time
+             val editor = sharedPreferences.edit()
+             editor.putLong("lastMoneyTime", System.currentTimeMillis())
+             editor.putInt("money", money+100);
+             editor.apply()
+         } else {
+             // Player has already received money today
+             // You can add a message or handle this case as needed
+             Log.d("MyApp", "Already received money today")
+         }
+
+         val moneyText: TextView = findViewById(R.id.moneyHomeTxt)
+         moneyText.text = ""+money;
+     }
+
+     private fun SetNewScreen(screen: Screens) {
         // Implement the logic to switch to the selected screen based on the 'screen' parameter.
         Log.d("MyApp", "Screen " + screen)
         when (screen) {

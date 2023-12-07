@@ -18,10 +18,18 @@ class ShopScreen : AppCompatActivity() {
 
         //gets data for use and updates a few text views to show them
         dataSetup()
+        val sharedPreferences = getSharedPreferences("your_game_prefs", Context.MODE_PRIVATE)
 
         val navigateToPlayRoomButton: Button = findViewById(R.id.back_b_shoop)
         navigateToPlayRoomButton.setOnClickListener {
             SetNewScreen(Screens.Home)
+        }
+        //dev use money reset button
+        val moneyButton: Button = findViewById((R.id.button2))
+        moneyButton.setOnClickListener{
+            val editor = sharedPreferences.edit()
+            editor.putInt("money", 100)
+            editor.apply()
         }
 
         //item buy buttons
@@ -80,144 +88,148 @@ class ShopScreen : AppCompatActivity() {
 
     private fun itemPurchased(cost: Int, id: Int) {
         val sharedPreferences = getSharedPreferences("your_game_prefs", Context.MODE_PRIVATE)
-
         var money = sharedPreferences.getInt("money", 0)
 
-        if(id == 1){
-            var amount = sharedPreferences.getInt("food1", 0)
+        if (money >= cost) {
+            if (id == 1) {
+                var amount = sharedPreferences.getInt("food1", 0)
 
-            //does the buying
-            money -= cost
-            amount += 1
+                //does the buying
+                money -= cost
+                amount += 1
 
-            //saves the buying
-            val editor = sharedPreferences.edit()
-            editor.putInt("money", money)
-            editor.putInt("food1", amount)
-            editor.apply()
+                //saves the buying
+                val editor = sharedPreferences.edit()
+                editor.putInt("money", money)
+                editor.putInt("food1", amount)
+                editor.apply()
 
-            //updates money textview
-            val textView8 : TextView = findViewById(R.id.textView8)
-            textView8.text = "$money"
-        }
-        if(id == 2){
-            var amount = sharedPreferences.getInt("food2", 0)
+                //updates money textview
+                val textView8: TextView = findViewById(R.id.textView8)
+                textView8.text = "$money"
+            }
+            if (id == 2) {
+                var amount = sharedPreferences.getInt("food2", 0)
 
-            //does the buying
-            money -= cost
-            amount += 1
+                //does the buying
+                money -= cost
+                amount += 1
 
-            //saves the buying
-            val editor = sharedPreferences.edit()
-            editor.putInt("money", money)
-            editor.putInt("food2", amount)
-            editor.apply()
+                //saves the buying
+                val editor = sharedPreferences.edit()
+                editor.putInt("money", money)
+                editor.putInt("food2", amount)
+                editor.apply()
 
-            //updates money textview
-            val textView8 : TextView = findViewById(R.id.textView8)
-            textView8.text = "$money"
-        }
-        if(id == 3){
-            var amount = sharedPreferences.getInt("food3", 0)
+                //updates money textview
+                val textView8: TextView = findViewById(R.id.textView8)
+                textView8.text = "$money"
+            }
+            if (id == 3) {
+                var amount = sharedPreferences.getInt("food3", 0)
 
-            //does the buying
-            money -= cost
-            amount += 1
+                //does the buying
+                money -= cost
+                amount += 1
 
-            //saves the buying
-            val editor = sharedPreferences.edit()
-            editor.putInt("money", money)
-            editor.putInt("food3", amount)
-            editor.apply()
+                //saves the buying
+                val editor = sharedPreferences.edit()
+                editor.putInt("money", money)
+                editor.putInt("food3", amount)
+                editor.apply()
 
-            //updates money textview
-            val textView8 : TextView = findViewById(R.id.textView8)
-            textView8.text = "$money"
-        }
-        if(id == 4){
-            var amount = sharedPreferences.getInt("food4", 0)
+                //updates money textview
+                val textView8: TextView = findViewById(R.id.textView8)
+                textView8.text = "$money"
+            }
+            if (id == 4) {
+                var amount = sharedPreferences.getInt("food4", 0)
+                //does the buying
+                money -= cost
+                amount += 1
 
-            //does the buying
-            money -= cost
-            amount += 1
+                //saves the buying
+                val editor = sharedPreferences.edit()
+                editor.putInt("money", money)
+                editor.putInt("food4", amount)
+                editor.apply()
 
-            //saves the buying
-            val editor = sharedPreferences.edit()
-            editor.putInt("money", money)
-            editor.putInt("food4", amount)
-            editor.apply()
+                //updates money textview
+                val textView8: TextView = findViewById(R.id.textView8)
+                textView8.text = "$money"
+            }
+            if (id == 5) {
+                var amount = sharedPreferences.getInt("toy1", 0)
+                if (amount <= 0) {
+                    //does the buying
+                    money -= cost
+                    amount += 1
 
-            //updates money textview
-            val textView8 : TextView = findViewById(R.id.textView8)
-            textView8.text = "$money"
-        }
-        if(id == 5){
-            var amount = sharedPreferences.getInt("toy1", 0)
+                    //saves the buying
+                    val editor = sharedPreferences.edit()
+                    editor.putInt("money", money)
+                    editor.putInt("toy1", amount)
+                    editor.apply()
 
-            //does the buying
-            money -= cost
-            amount += 1
+                    //updates money textview
+                    val textView8: TextView = findViewById(R.id.textView8)
+                    textView8.text = "$money"
+                }
+            }
+            if (id == 6) {
+                var amount = sharedPreferences.getInt("toy2", 0)
+                if (amount <= 0) {
+                    //does the buying
+                    money -= cost
+                    amount += 1
 
-            //saves the buying
-            val editor = sharedPreferences.edit()
-            editor.putInt("money", money)
-            editor.putInt("toy1", amount)
-            editor.apply()
+                    //saves the buying
+                    val editor = sharedPreferences.edit()
+                    editor.putInt("money", money)
+                    editor.putInt("toy2", amount)
+                    editor.apply()
 
-            //updates money textview
-            val textView8 : TextView = findViewById(R.id.textView8)
-            textView8.text = "$money"
-        }
-        if(id == 6){
-            var amount = sharedPreferences.getInt("toy2", 0)
+                    //updates money textview
+                    val textView8: TextView = findViewById(R.id.textView8)
+                    textView8.text = "$money"
+                }
+            }
+            if (id == 7) {
+                var amount = sharedPreferences.getInt("toy3", 0)
+                if (amount <= 0) {
+                    //does the buying
+                    money -= cost
+                    amount += 1
 
-            //does the buying
-            money -= cost
-            amount += 1
+                    //saves the buying
+                    val editor = sharedPreferences.edit()
+                    editor.putInt("money", money)
+                    editor.putInt("toy3", amount)
+                    editor.apply()
 
-            //saves the buying
-            val editor = sharedPreferences.edit()
-            editor.putInt("money", money)
-            editor.putInt("toy2", amount)
-            editor.apply()
+                    //updates money textview
+                    val textView8: TextView = findViewById(R.id.textView8)
+                    textView8.text = "$money"
+                }
+            }
+            if (id == 8) {
+                var amount = sharedPreferences.getInt("toy4", 0)
+                if (amount >= 0) {
+                    //does the buying
+                    money -= cost
+                    amount += 1
 
-            //updates money textview
-            val textView8 : TextView = findViewById(R.id.textView8)
-            textView8.text = "$money"
-        }
-        if(id == 7){
-            var amount = sharedPreferences.getInt("toy3", 0)
+                    //saves the buying
+                    val editor = sharedPreferences.edit()
+                    editor.putInt("money", money)
+                    editor.putInt("toy4", amount)
+                    editor.apply()
 
-            //does the buying
-            money -= cost
-            amount += 1
-
-            //saves the buying
-            val editor = sharedPreferences.edit()
-            editor.putInt("money", money)
-            editor.putInt("toy3", amount)
-            editor.apply()
-
-            //updates money textview
-            val textView8 : TextView = findViewById(R.id.textView8)
-            textView8.text = "$money"
-        }
-        if(id == 8){
-            var amount = sharedPreferences.getInt("toy4", 0)
-
-            //does the buying
-            money -= cost
-            amount += 1
-
-            //saves the buying
-            val editor = sharedPreferences.edit()
-            editor.putInt("money", money)
-            editor.putInt("toy4", amount)
-            editor.apply()
-
-            //updates money textview
-            val textView8 : TextView = findViewById(R.id.textView8)
-            textView8.text = "$money"
+                    //updates money textview
+                    val textView8: TextView = findViewById(R.id.textView8)
+                    textView8.text = "$money"
+                }
+            }
         }
 
     }

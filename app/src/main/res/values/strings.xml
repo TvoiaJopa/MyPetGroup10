@@ -10,15 +10,16 @@
     <string name="shopSelection1">Food items</string>
     <string name="shopSelection2">Pet toys</string>
     <!-- Default strings for shop prices -->
-    <string name="priceItem1">0</string>
-    <string name="priceItem2">0</string>
-    <string name="priceItem3">0</string>
-    <string name="priceItem4">0</string>
-    <string name="priceItem5">0</string>
-    <string name="priceItem6">0</string>
-    <string name="priceItem7">0</string>
-    <string name="priceItem8">0</string>
-    
+
+    <string name="priceItem1">5</string>
+    <string name="priceItem2">10</string>
+    <string name="priceItem3">15</string>
+    <string name="priceItem4">20</string>
+    <string name="priceItem5">5</string>
+    <string name="priceItem6">10</string>
+    <string name="priceItem7">15</string>
+    <string name="priceItem8">20</string>
+    <string name="google_map_api_key"></string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris

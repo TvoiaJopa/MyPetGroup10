@@ -9,6 +9,7 @@ import android.os.CountDownTimer
 import android.os.Handler
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -49,15 +50,9 @@ class MainActivity : AppCompatActivity() {
             SetNewScreen(Screens.PlayRoom)
         }
 
-        val foodButton: Button = findViewById(R.id.food_b)
-        foodButton.setOnClickListener {
-            Log.d("MyApp", "foodButton " )
-
-            giveFood()
-        }
 
         checkAndGiveMoney();
-
+        setFoodButtons();
     }
      override fun onResume() {
          super.onResume()
@@ -202,19 +197,18 @@ class MainActivity : AppCompatActivity() {
         foodSlider.progress = hunger
     }
 
-    private fun giveFood() {
+    private fun giveFood(foodNum : Int) {
         val sharedPreferences = getSharedPreferences("your_game_prefs", Context.MODE_PRIVATE)
         var hunger = sharedPreferences.getInt("hunger", -1)
         var hungerMax = sharedPreferences.getInt("hungerMax", -1)
 
         if (hunger > 100) {
             hunger = 100;
-        } else if (hunger + 25 > 100) {
+        } else if (hunger + foodNum > 100) {
             hunger = 100;
 
         } else {
-            hunger += 25
-
+            hunger += foodNum
         }
 
         val editor = sharedPreferences.edit()
@@ -251,6 +245,102 @@ class MainActivity : AppCompatActivity() {
          val moneyText: TextView = findViewById(R.id.moneyHomeTxt)
          moneyText.text = ""+money;
      }
+
+    public fun setFoodButtons(){
+        val sharedPreferences = getSharedPreferences("your_game_prefs", Context.MODE_PRIVATE)
+
+        // Retrieve data with default values
+        var food1 = sharedPreferences.getInt("food1", 0)
+        var food2 = sharedPreferences.getInt("food2", 0)
+        val food3 = sharedPreferences.getInt("food3", 0)
+        val food4 = sharedPreferences.getInt("food4", 0)
+
+        val food1Text: TextView = findViewById(R.id.iceCreamTXTNumM)
+        val food2Text: TextView = findViewById(R.id.sushiTXTNumMain)
+        val food3Text: TextView = findViewById(R.id.pizzaTXTNumMain)
+        val food4Text: TextView = findViewById(R.id.cakeTXTNumMain)
+
+        food1Text.text = ""+food1;
+        food2Text.text = ""+food2;
+        food3Text.text = ""+food3;
+        food4Text.text = ""+food4;
+
+        val food1Button: ImageButton = findViewById(R.id.iceCreamBMain);
+        food1Button.setOnClickListener {
+            Log.d("MyApp", "food1Button ")
+            clickFoodButton(1)
+        }
+        val food2Button: ImageButton = findViewById(R.id.sushiBMain);
+        food2Button.setOnClickListener {
+            Log.d("MyApp", "food2Button ")
+            clickFoodButton(2)
+        }
+        val food3Button: ImageButton = findViewById(R.id.pizzaBMain);
+        food3Button.setOnClickListener {
+            Log.d("MyApp", "food3Button ")
+            clickFoodButton(3)
+        }
+        val food4Button: ImageButton = findViewById(R.id.cakeBMain);
+        food4Button.setOnClickListener {
+            Log.d("MyApp", "food4Button ")
+            clickFoodButton(4)
+        }
+
+        if(food1<=0){
+            food1Button.setEnabled(false);
+        }else{
+            food1Button.setEnabled(true);
+        }
+
+        if(food2<=0){
+            food2Button.setEnabled(false);
+        }else{
+            food2Button.setEnabled(true);
+        }
+
+        if(food3<=0){
+            food3Button.setEnabled(false);
+        }else{
+            food3Button.setEnabled(true);
+        }
+
+        if(food4<=0){
+            food4Button.setEnabled(false);
+        }else{
+            food4Button.setEnabled(true);
+        }
+
+
+    }
+
+    public fun clickFoodButton(num : Int){
+        val sharedPreferences = getSharedPreferences("your_game_prefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        if(num == 1){
+            var food1 = sharedPreferences.getInt("food1", 0)
+            editor.putInt("food1", food1-1);
+            giveFood(25);
+        }else if (num == 2){
+            var food2 = sharedPreferences.getInt("food2", 0)
+            editor.putInt("food2", food2-1);
+            giveFood(40);
+
+        }else if (num == 3){
+            var food3 = sharedPreferences.getInt("food3", 0)
+            editor.putInt("food3", food3-1);
+            giveFood(65);
+
+        }else{
+            var food4 = sharedPreferences.getInt("food4", 0)
+            editor.putInt("food4", food4-1);
+            giveFood(100);
+
+        }
+
+        editor.apply()
+        setFoodButtons();
+    }
 
      private fun SetNewScreen(screen: Screens) {
         // Implement the logic to switch to the selected screen based on the 'screen' parameter.

@@ -19,7 +19,7 @@
     <string name="priceItem6">10</string>
     <string name="priceItem7">15</string>
     <string name="priceItem8">20</string>
-    <string name="google_map_api_key"></string>
+    <string name="google_map_api_key">AIzaSyCt6N1006ztnPpi8nMxC8IpeG77A0AGMC0</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris

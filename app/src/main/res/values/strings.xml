@@ -10,6 +10,7 @@
     <string name="shopSelection1">Food items</string>
     <string name="shopSelection2">Pet toys</string>
     <!-- Default strings for shop prices -->
+
     <string name="priceItem1">5</string>
     <string name="priceItem2">10</string>
     <string name="priceItem3">15</string>

@@ -28,15 +28,25 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.OnTokenCanceledListener
+import kotlin.math.roundToInt
+
 
 class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var currentLocation: Location
+    private lateinit var oldLocation: Location
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val permissionCode = 101
     private var locationRequest = createLocationRequest()
     val mainHandler = Handler(Looper.getMainLooper())
     private lateinit var locationCallback: LocationCallback
     var requestingLocationUpdates = true
+    var firstCheck = true
+
+    var energyMax = 300
+    var energyAmount = energyMax
+
+    //energyBar.max = energyMax
+    //energyBar.progress = energyAmount
 
 
     private var mGoogleMap: GoogleMap? = null
@@ -48,6 +58,8 @@ class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
         navigateToPlayRoomButton.setOnClickListener {
             SetNewScreen(Screens.Home)
 
+
+
         }
 
         //Used to import devices last know location
@@ -55,17 +67,18 @@ class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
         locationCallback = object : LocationCallback() {
 
 
-
         }
-
+        val energyBar: ProgressBar = findViewById(R.id.energy_mainact_slider)
+        energyBar.max = energyMax
+        energyBar.progress = energyAmount
         createLocationRequest()
         startLocationUpdates()
 
         mainHandler.post(object : Runnable {
             override fun run() {
                 startLocationUpdates()
-                //createLocationRequest()
-                mainHandler.postDelayed(this, 2000)
+                energyBar.progress = energyAmount
+                mainHandler.postDelayed(this, 4000)
             }
         })
     }
@@ -123,16 +136,25 @@ class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
                 .addOnSuccessListener { location: Location? ->
                     if (location != null) {
                         currentLocation = location
+                        if (firstCheck == true) {
+                            firstCheck = false
+                            oldLocation = currentLocation
+                        }
+                        else {
+                            calculateEnergy()
+                        }
+
                         val mapFragment =
                             supportFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
                         mapFragment.getMapAsync(this)
+
                         /*val toast = Toast.makeText(this, "test", Toast.LENGTH_SHORT)
                         toast.show()*/
 
+
+
                 }
             }
-
-
 
     }
 
@@ -159,23 +181,12 @@ class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
             BitmapDescriptorFactory.fromResource(R.drawable.lechita0030))
 
 
-
-
         googleMap?.animateCamera(CameraUpdateFactory.newLatLng(latLng))
         googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
         googleMap?.addMarker(markerOptions)
         mGoogleMap = googleMap
+
     }
-    private fun energy() {
-        val energyBar: ProgressBar = findViewById(R.id.energy_mainact_slider)
-        var energyMax = 100
-        var energyAmount = energyMax
-        energyBar.max = energyMax
-        energyBar.progress = energyAmount
-    }
-
-
-
 
     fun createLocationRequest(): LocationRequest =
 
@@ -184,9 +195,6 @@ class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
                 setWaitForAccurateLocation(false)
                 setMaxUpdateDelayMillis(2000)
             }.build()
-
-
-
 
     override fun onPause() {
         super.onPause()
@@ -200,9 +208,37 @@ class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
         fusedLocationProviderClient.removeLocationUpdates(locationCallback)
         requestingLocationUpdates = false;
     }
+    private fun calculateEnergy() {
+        //figure out how to check last location
+        //use haversine formula to calculate distance between old location and new one
+        //reduce energy based on result
+       /* newLat = currentLocation.latitude
+        newLon = currentLocation.longitude*/
+        if (oldLocation != currentLocation)
+        {
+            val distance = currentLocation.distanceTo(oldLocation).roundToInt()
+            oldLocation = currentLocation
+            energyAmount -= distance
+            Toast.makeText(this, energyAmount.toString(), Toast.LENGTH_SHORT).show()
+
+        }
+        else {
+            //should do nothing  but never actually happens
+
+        }
+
+        //val distance = oldLocation.distanceTo(currentLocation)
+        //Toast.makeText(this, "perkele", Toast.LENGTH_SHORT).show()
+       // val toast = Toast.makeText(this, distance.toString(), Toast.LENGTH_SHORT).show()
 
 
 
 }
+
+
+
+}
+
+
 
 

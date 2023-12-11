@@ -5,10 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+
 
 class ShopScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,35 +36,35 @@ class ShopScreen : AppCompatActivity() {
         //item buy buttons
         val buyFoodItem1: FloatingActionButton = findViewById(R.id.floatingActionButton)
         buyFoodItem1.setOnClickListener{
-            itemPurchased(5,1)
+            popupFunc(5 ,1)
         }
         val buyFoodItem2: FloatingActionButton = findViewById(R.id.floatingActionButton3)
         buyFoodItem2.setOnClickListener{
-            itemPurchased(10,2)
+            popupFunc(10 ,2)
         }
         val buyFoodItem3: FloatingActionButton = findViewById(R.id.floatingActionButton2)
         buyFoodItem3.setOnClickListener{
-            itemPurchased(15,3)
+            popupFunc(15,3)
         }
         val buyFoodItem4: FloatingActionButton = findViewById(R.id.floatingActionButton4)
         buyFoodItem4.setOnClickListener{
-            itemPurchased(20,4)
+            popupFunc(20,4)
         }
         val buyToyItem1: FloatingActionButton = findViewById(R.id.floatingActionButton5)
         buyToyItem1.setOnClickListener{
-            itemPurchased(5,5)
+            popupFunc(5,5)
         }
         val buyToyItem2: FloatingActionButton = findViewById(R.id.floatingActionButton8)
         buyToyItem2.setOnClickListener{
-            itemPurchased(10,6)
+            popupFunc(10,6)
         }
         val buyToyItem3: FloatingActionButton = findViewById(R.id.floatingActionButton7)
         buyToyItem3.setOnClickListener{
-            itemPurchased(15,7)
+            popupFunc(15,7)
         }
         val buyToyItem4: FloatingActionButton = findViewById(R.id.floatingActionButton6)
         buyToyItem4.setOnClickListener{
-            itemPurchased(20,8)
+            popupFunc(20,8)
         }
 
     }
@@ -86,6 +87,30 @@ class ShopScreen : AppCompatActivity() {
         textView8.text = "$money"
     }
 
+    //shows a popup to ask weather or not to buy this item
+    private fun popupFunc(cost: Int, id: Int) {
+        val builder = AlertDialog.Builder(this)
+
+        builder.setTitle("Confirm buy")
+        builder.setMessage("Are you sure you want to buy this item?")
+
+        builder.setPositiveButton("Yes") { dialog, which ->
+            itemPurchased(cost, id)
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton(
+            "No"
+        ) { dialog, which ->
+            //does nothing
+            dialog.dismiss()
+        }
+
+        val alert = builder.create()
+        alert.show()
+    }
+
+    //function to buy the item
     private fun itemPurchased(cost: Int, id: Int) {
         val sharedPreferences = getSharedPreferences("your_game_prefs", Context.MODE_PRIVATE)
         var money = sharedPreferences.getInt("money", 0)

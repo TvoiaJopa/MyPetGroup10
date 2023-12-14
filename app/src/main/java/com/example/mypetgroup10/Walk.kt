@@ -248,21 +248,22 @@ class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
                     checkForReward()
                 }
             }
-            else  {
+            else  if (energyAmount<0){
                 //If our energy goes to negative
                 energyAmount = 0
             }
 
-            //Toast.makeText(this, energyAmount.toString(), Toast.LENGTH_SHORT).show()
+
 
         }
 
         //Add +1 to energy
 
-        energyAmount+1
+        energyAmount += 1
         editor.putInt("energyAmount",energyAmount)
         editor.putInt("rewardDistance",rewardDistance)
         editor.apply()
+        Toast.makeText(this, energyAmount.toString(), Toast.LENGTH_SHORT).show()
 
 }
     fun checkForReward (){

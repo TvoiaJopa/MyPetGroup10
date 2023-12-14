@@ -19,8 +19,8 @@
 
     <Button
         android:id="@+id/button2"
-        android:layout_width="86dp"
-        android:layout_height="52dp"
+        android:layout_width="117dp"
+        android:layout_height="48dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:backgroundTint="#BF952B"
@@ -34,7 +34,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="120dp"
         android:layout_marginEnd="50dp"
-        android:elevation="50dp"
+        android:elevation="20dp"
         android:background="@drawable/shop_rounded_corner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -45,7 +45,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="50dp"
         android:layout_marginTop="120dp"
-        android:elevation="50dp"
+        android:elevation="20dp"
         android:background="@drawable/shop_rounded_corner"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,6 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:clickable="true"
+        app:elevation="100dp"
         app:tint="@null"
         app:maxImageSize="40dp"
         app:backgroundTint="#C8BFE7"
@@ -70,6 +71,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:clickable="true"
+        app:elevation="100dp"
         app:tint="@null"
         app:maxImageSize="40dp"
         app:backgroundTint="#C8BFE7"
@@ -84,6 +86,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="24dp"
         android:clickable="true"
+        app:elevation="100dp"
         app:tint="@null"
         app:maxImageSize="40dp"
         app:backgroundTint="#C8BFE7"
@@ -97,6 +100,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:clickable="true"
+        app:elevation="100dp"
         app:tint="@null"
         app:maxImageSize="40dp"
         app:backgroundTint="#C8BFE7"
@@ -110,6 +114,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:clickable="true"
+        app:elevation="100dp"
         app:tint="@null"
         app:maxImageSize="40dp"
         app:backgroundTint="#C8BFE7"
@@ -123,6 +128,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:clickable="true"
+        app:elevation="100dp"
         app:tint="@null"
         app:maxImageSize="40dp"
         app:backgroundTint="#C8BFE7"
@@ -137,6 +143,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="24dp"
         android:clickable="true"
+        app:elevation="100dp"
         app:tint="@null"
         app:maxImageSize="40dp"
         app:backgroundTint="#C8BFE7"
@@ -150,6 +157,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:clickable="true"
+        app:elevation="100dp"
         app:tint="@null"
         app:maxImageSize="40dp"
         app:backgroundTint="#C8BFE7"
@@ -163,7 +171,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="225dp"
-        android:elevation="50dp"
+        android:elevation="20dp"
         android:gravity="center"
         android:background="@drawable/shop_rounded_corner"
         android:text="@string/shopSelection1"
@@ -296,6 +304,7 @@
         android:layout_width="367dp"
         android:layout_height="482dp"
         android:layout_marginTop="100dp"
+        android:elevation="5dp"
         android:background="@drawable/shop_buyarea_rounded_corner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -309,8 +318,114 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="30dp"
         android:elevation="100dp"
-        android:text="TextView"
+        android:text="Error"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/button2"
+        app:layout_constraintStart_toStartOf="@+id/button2"
+        app:layout_constraintTop_toTopOf="@+id/button2"
+        app:srcCompat="@drawable/moonies" />
+
+    <ImageView
+        android:id="@+id/imageViewHighLighter5"
+        android:layout_width="65dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="295dp"
+        android:background="@drawable/shop_highlight_rounded_corner"
+        android:elevation="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/justred" />
+
+    <ImageView
+        android:id="@+id/imageViewHighLighter6"
+        android:layout_width="65dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="187dp"
+        android:layout_marginTop="295dp"
+        android:background="@drawable/shop_highlight_rounded_corner"
+        android:elevation="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/justred" />
+
+    <ImageView
+        android:id="@+id/imageViewHighLighter7"
+        android:layout_width="65dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="187dp"
+        android:layout_marginTop="295dp"
+        android:background="@drawable/shop_highlight_rounded_corner"
+        android:elevation="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/justred" />
+
+    <ImageView
+        android:id="@+id/imageViewHighLighter8"
+        android:layout_width="65dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="267dp"
+        android:layout_marginTop="295dp"
+        android:background="@drawable/shop_highlight_rounded_corner"
+        android:elevation="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/justred" />
+
+    <ImageView
+        android:id="@+id/imageViewHighLighter"
+        android:layout_width="65dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="457dp"
+        android:background="@drawable/shop_highlight_rounded_corner"
+        android:elevation="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/justred" />
+
+    <ImageView
+        android:id="@+id/imageViewHighLighter2"
+        android:layout_width="65dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="107dp"
+        android:layout_marginTop="456dp"
+        android:background="@drawable/shop_highlight_rounded_corner"
+        android:elevation="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/justred" />
+
+    <ImageView
+        android:id="@+id/imageViewHighLighter3"
+        android:layout_width="65dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="187dp"
+        android:layout_marginTop="456dp"
+        android:background="@drawable/shop_highlight_rounded_corner"
+        android:elevation="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/justred" />
+
+    <ImageView
+        android:id="@+id/imageViewHighLighter4"
+        android:layout_width="65dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="267dp"
+        android:layout_marginTop="456dp"
+        android:background="@drawable/shop_highlight_rounded_corner"
+        android:elevation="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/justred" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

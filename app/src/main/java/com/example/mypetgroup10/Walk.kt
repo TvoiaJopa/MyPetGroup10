@@ -9,7 +9,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -54,6 +56,7 @@ class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
     var energyMax = 500
     var energyAmount = energyMax
     var rewardDistance = 0
+    var rewardTaken = true
 
     //energyBar.max = energyMax
     //energyBar.progress = energyAmount
@@ -238,12 +241,11 @@ class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
             //calculate distance between old and current locations, update old location to match current one
             val distance = currentLocation.distanceTo(oldLocation).roundToInt()
             oldLocation = currentLocation
-
+            energyAmount -= distance
             //Check if we have enough energy to get rewards, check if enough time has passed for reward check
             if (energyAmount > 0) {
-                energyAmount -= distance
                 rewardDistance += distance
-                if (rewardDistance > rewardInterval) {
+                if (rewardDistance > rewardInterval && rewardTaken) {
                     rewardDistance = 0
                     checkForReward()
                 }
@@ -257,29 +259,53 @@ class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
 
         }
 
-        //Add +1 to energy
+        //Add +3 to energy
 
-        energyAmount += 1
+        energyAmount += 2
         editor.putInt("energyAmount",energyAmount)
         editor.putInt("rewardDistance",rewardDistance)
         editor.apply()
-        Toast.makeText(this, energyAmount.toString(), Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this, energyAmount.toString(), Toast.LENGTH_SHORT).show()
 
 }
     fun checkForReward (){
-        val sharedPreferences = getSharedPreferences("your_game_prefs", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
+        //val sharedPreferences = getSharedPreferences("your_game_prefs", Context.MODE_PRIVATE)
+        //val editor = sharedPreferences.edit()
 
         //Rng check if we get reward
         if (Random.nextInt(0, 100) < rewardChance) {
             //give reward
-            var money = sharedPreferences.getInt("money",0)+rewardAmount
-            Toast.makeText(this, money.toString(), Toast.LENGTH_SHORT).show()
-            editor.putInt("money",money)
-            editor.apply()
+            //var money = sharedPreferences.getInt("money",0)+rewardAmount
+            Toast.makeText(this, "Pet found some money!", Toast.LENGTH_SHORT).show()
+            spawnReward()
+           // editor.putInt("money",money)
+           // editor.apply()
 
         }
     }
+
+    fun spawnReward () {
+        rewardTaken = false
+        val rewardButton: ImageView = findViewById(R.id.rewardButton)
+        rewardButton.setVisibility(
+            if (!rewardTaken)View.VISIBLE else View.GONE
+        )
+        rewardButton.setOnClickListener{ claimReward() }
+    }
+    fun claimReward() {
+        val sharedPreferences = getSharedPreferences("your_game_prefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        rewardTaken = true
+        var money = sharedPreferences.getInt("money",0)+rewardAmount
+        val rewardButton: ImageView = findViewById(R.id.rewardButton)
+        rewardButton.setVisibility(
+            View.GONE
+        )
+        Toast.makeText(this, "Collected $rewardAmount money", Toast.LENGTH_SHORT).show()
+        editor.putInt("money",money)
+        editor.apply()
+    }
+
 
 
 

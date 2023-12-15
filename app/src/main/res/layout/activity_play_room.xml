@@ -54,6 +54,37 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/vetolelu" />
 
+    <TextView
+        android:id="@+id/toy1Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Toy 1: 3"
+    app:layout_constraintStart_toStartOf="@+id/toy1"
+    app:layout_constraintTop_toBottomOf="@+id/toy1" />
+
+    <TextView
+        android:id="@+id/toy2Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Toy 2: 5"
+    app:layout_constraintStart_toStartOf="@+id/toy2"
+    app:layout_constraintTop_toBottomOf="@+id/toy2" />
+
+    <TextView
+        android:id="@+id/toy3Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Toy 3: 2"
+    app:layout_constraintStart_toStartOf="@+id/toy3"
+    app:layout_constraintTop_toBottomOf="@+id/toy3" />
+
+    <TextView
+        android:id="@+id/toy4Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Toy 4: 4"
+    app:layout_constraintStart_toStartOf="@+id/toy4"
+    app:layout_constraintTop_toBottomOf="@+id/toy4" />
 
     <ImageView
         android:id="@+id/petImageView"

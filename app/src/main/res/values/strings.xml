@@ -32,6 +32,7 @@
     <string name="priceItem8">20</string>
     <!--api key-->
     <string name="google_map_api_key"></string>
+    <string name="toy_count">Toy Count: %d</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris

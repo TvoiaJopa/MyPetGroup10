@@ -189,6 +189,11 @@ class MainActivity : AppCompatActivity() {
             editor.putInt("food3", 0)
             editor.putInt("food4", 0)
 
+            //Add walk-screen related variables
+            editor.putInt("energyMax",300)
+            editor.putInt("energyAmount",300)
+            editor.putInt("rewardDistance",0)
+
             editor.apply()
         }
 

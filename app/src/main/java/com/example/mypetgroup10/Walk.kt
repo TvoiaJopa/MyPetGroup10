@@ -1,6 +1,7 @@
 package com.example.mypetgroup10
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -8,7 +9,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -29,9 +32,15 @@ import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.OnTokenCanceledListener
 import kotlin.math.roundToInt
+import kotlin.random.Random
 
 
 class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
+
+    val rewardInterval = 50
+    val rewardChance = 70
+    val rewardAmount = 50
+
     private lateinit var currentLocation: Location
     private lateinit var oldLocation: Location
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -42,8 +51,12 @@ class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
     var requestingLocationUpdates = true
     var firstCheck = true
 
-    var energyMax = 300
+
+
+    var energyMax = 500
     var energyAmount = energyMax
+    var rewardDistance = 0
+    var rewardTaken = true
 
     //energyBar.max = energyMax
     //energyBar.progress = energyAmount
@@ -51,6 +64,11 @@ class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
 
     private var mGoogleMap: GoogleMap? = null
     override fun onCreate(savedInstanceState: Bundle?) {
+        val sharedPreferences = getSharedPreferences("your_game_prefs", Context.MODE_PRIVATE)
+        //Get saved data
+        energyMax = sharedPreferences.getInt("energyMax",500)
+        energyAmount = sharedPreferences.getInt("energyAmount",energyMax)
+        rewardDistance = sharedPreferences.getInt("rewardDistance",0)
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_walk_screen)
@@ -68,17 +86,22 @@ class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
 
 
         }
+
+        //Init energy bar
         val energyBar: ProgressBar = findViewById(R.id.energy_mainact_slider)
         energyBar.max = energyMax
         energyBar.progress = energyAmount
         createLocationRequest()
-        startLocationUpdates()
+       // startLocationUpdates()
+
+        //Loop that checks location every 4s and updates energy bar
 
         mainHandler.post(object : Runnable {
             override fun run() {
                 startLocationUpdates()
                 energyBar.progress = energyAmount
                 mainHandler.postDelayed(this, 4000)
+
             }
         })
     }
@@ -109,6 +132,8 @@ class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
         }
     }
     private fun startLocationUpdates() {
+
+        //Check if we have permission for location, request it if not
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -125,6 +150,7 @@ class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
             return
 
         }
+        //Request location update from play services
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
         val getLocation =
             fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, object : CancellationToken() {
@@ -136,23 +162,21 @@ class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
                 .addOnSuccessListener { location: Location? ->
                     if (location != null) {
                         currentLocation = location
+
+                        //Old location starts as null, this is a dirty hack to avoid crash due check of null value
                         if (firstCheck == true) {
                             firstCheck = false
                             oldLocation = currentLocation
                         }
+                        //Value is not null, call for energy calculation and reward check
                         else {
                             calculateEnergy()
                         }
+                        //Call for gmap update
 
                         val mapFragment =
                             supportFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
                         mapFragment.getMapAsync(this)
-
-                        /*val toast = Toast.makeText(this, "test", Toast.LENGTH_SHORT)
-                        toast.show()*/
-
-
-
                 }
             }
 
@@ -209,31 +233,79 @@ class WalkScreen : AppCompatActivity(), OnMapReadyCallback {
         requestingLocationUpdates = false;
     }
     private fun calculateEnergy() {
-        //figure out how to check last location
-        //use haversine formula to calculate distance between old location and new one
-        //reduce energy based on result
-       /* newLat = currentLocation.latitude
-        newLon = currentLocation.longitude*/
+        val sharedPreferences = getSharedPreferences("your_game_prefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        //Compare old location to current location
         if (oldLocation != currentLocation)
         {
+            //calculate distance between old and current locations, update old location to match current one
             val distance = currentLocation.distanceTo(oldLocation).roundToInt()
             oldLocation = currentLocation
             energyAmount -= distance
-            Toast.makeText(this, energyAmount.toString(), Toast.LENGTH_SHORT).show()
+            //Check if we have enough energy to get rewards, check if enough time has passed for reward check
+            if (energyAmount > 0) {
+                rewardDistance += distance
+                if (rewardDistance > rewardInterval && rewardTaken) {
+                    rewardDistance = 0
+                    checkForReward()
+                }
+            }
+            else  if (energyAmount<0){
+                //If our energy goes to negative
+                energyAmount = 0
+            }
+
+
 
         }
-        else {
-            //should do nothing  but never actually happens
 
-        }
+        //Add +3 to energy
 
-        //val distance = oldLocation.distanceTo(currentLocation)
-        //Toast.makeText(this, "perkele", Toast.LENGTH_SHORT).show()
-       // val toast = Toast.makeText(this, distance.toString(), Toast.LENGTH_SHORT).show()
-
-
+        energyAmount += 2
+        editor.putInt("energyAmount",energyAmount)
+        editor.putInt("rewardDistance",rewardDistance)
+        editor.apply()
+        //Toast.makeText(this, energyAmount.toString(), Toast.LENGTH_SHORT).show()
 
 }
+    fun checkForReward (){
+        //val sharedPreferences = getSharedPreferences("your_game_prefs", Context.MODE_PRIVATE)
+        //val editor = sharedPreferences.edit()
+
+        //Rng check if we get reward
+        if (Random.nextInt(0, 100) < rewardChance) {
+            //give reward
+            //var money = sharedPreferences.getInt("money",0)+rewardAmount
+            Toast.makeText(this, "Pet found some money!", Toast.LENGTH_SHORT).show()
+            spawnReward()
+           // editor.putInt("money",money)
+           // editor.apply()
+
+        }
+    }
+
+    fun spawnReward () {
+        rewardTaken = false
+        val rewardButton: ImageView = findViewById(R.id.rewardButton)
+        rewardButton.setVisibility(
+            if (!rewardTaken)View.VISIBLE else View.GONE
+        )
+        rewardButton.setOnClickListener{ claimReward() }
+    }
+    fun claimReward() {
+        val sharedPreferences = getSharedPreferences("your_game_prefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        rewardTaken = true
+        var money = sharedPreferences.getInt("money",0)+rewardAmount
+        val rewardButton: ImageView = findViewById(R.id.rewardButton)
+        rewardButton.setVisibility(
+            View.GONE
+        )
+        Toast.makeText(this, "Collected $rewardAmount money", Toast.LENGTH_SHORT).show()
+        editor.putInt("money",money)
+        editor.apply()
+    }
+
 
 
 
